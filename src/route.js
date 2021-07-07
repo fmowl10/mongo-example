@@ -1,29 +1,24 @@
 const router = require('express').Router();
 const Todo = require('./model/todo');
 
-router.get('/', (req, res) => {
-    Todo.findAll()
-        .then((todos) => {
-            res.send(todos);
-        });
-});
-router.get('/:id', (req, res) => {
-    Todo.findById(req.params.id)
-        .then(todo => res.send(todo))
+router.get('/', async (req, res) => {
+    res.send(await Todo.findAll().exec());
 });
 
-router.post('/', (req, res) => {
-    Todo.create(req.body)
-        .then(todo => res.send(todo));
+router.get('/:id', async (req, res) => {
+    res.send(await Todo.findById(req.params.id).exec());
 });
 
-router.put('/:id', (req, res) => {
-    Todo.findByIdAndUpdate(req.params.id, req.body, { new: true })
-        .then(todo => res.send(todo));
+router.post('/', async (req, res) => {
+    res.send(await Todo.create(req.body));
 });
 
-router.delete('/:id', (req, res) => {
-    Todo.findByIdAndDelete(req.params.id).then(todo => { console.log(todo); res.send(todo); });
+router.put('/:id', async (req, res) => {
+    res.send(await Todo.findByIdAndUpdate(req.params.id, req.body, { new: true }).exec());
+});
+
+router.delete('/:id', async (req, res) => {
+    res.send(await Todo.findByIdAndDelete(req.params.id).exec());
 })
 
 module.exports = router;
